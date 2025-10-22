@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us | Profile Wizard Portal</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Feather Icons -->
+  <script src="https://unpkg.com/feather-icons"></script>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+
+  <!-- Navbar -->
+  <custom-navbar></custom-navbar>
+
+  <main class="flex-grow container mx-auto px-4 py-8">
+    <div class="max-w-2xl mx-auto bg-white rounded-xl shadow-md overflow-hidden p-6">
+      <h1 class="text-3xl font-bold text-center mb-8 text-gray-800">Contact Us</h1>
+
+      <!-- Contact Form -->
+      <form id="contactForm" class="space-y-6" novalidate>
+        <!-- Full Name -->
+        <div class="space-y-1">
+          <label for="name" class="block text-sm font-medium text-gray-700">Full Name</label>
+          <input type="text" id="name" name="name"
+                 data-testid="test-contact-name"
+                 class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition"
+                 aria-required="true" aria-describedby="error-name">
+          <p id="error-name" data-testid="test-contact-error-name" class="text-red-600 text-sm mt-1 hidden"></p>
+        </div>
+
+        <!-- Email -->
+        <div class="space-y-1">
+          <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+          <input type="email" id="email" name="email"
+                 data-testid="test-contact-email"
+                 class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition"
+                 aria-required="true" aria-describedby="error-email">
+          <p id="error-email" data-testid="test-contact-error-email" class="text-red-600 text-sm mt-1 hidden"></p>
+        </div>
+
+        <!-- Subject -->
+        <div class="space-y-1">
+          <label for="subject" class="block text-sm font-medium text-gray-700">Subject</label>
+          <input type="text" id="subject" name="subject"
+                 data-testid="test-contact-subject"
+                 class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition"
+                 aria-required="true" aria-describedby="error-subject">
+          <p id="error-subject" data-testid="test-contact-error-subject" class="text-red-600 text-sm mt-1 hidden"></p>
+        </div>
+
+        <!-- Message -->
+        <div class="space-y-1">
+          <label for="message" class="block text-sm font-medium text-gray-700">Message</label>
+          <textarea id="message" name="message" rows="5"
+                    data-testid="test-contact-message"
+                    class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition"
+                    aria-required="true" aria-describedby="error-message"></textarea>
+          <p id="error-message" data-testid="test-contact-error-message" class="text-red-600 text-sm mt-1 hidden"></p>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit"
+                data-testid="test-contact-submit"
+                class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-4 rounded-lg transition duration-200 flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-purple-500">
+          <i data-feather="send"></i>
+          Send Message
+        </button>
+      </form>
+    </div>
+  </main>
+
+  <!-- Success Modal -->
+  <div id="successModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+    <div class="bg-white rounded-xl shadow-lg p-8 max-w-md w-full text-center space-y-4">
+      <i data-feather="check-circle" class="text-green-500 w-16 h-16 mx-auto"></i>
+      <h2 class="text-2xl font-semibold text-gray-800">Message Sent Successfully!</h2>
+      <p data-testid="test-contact-success" class="text-gray-600">Thank you for reaching out — we'll get back to you soon.</p>
+      <button id="closeModal"
+              class="mt-4 px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg focus:ring-2 focus:ring-purple-400">
+        Close
+      </button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <custom-footer></custom-footer>
+
+  <!-- Scripts -->
+  <script src="components/navbar.js"></script>
+  <script src="components/footer.js"></script>
+  <script>feather.replace();</script>
+
+  <!-- Form Validation Logic -->
+  <script>
+    const form = document.getElementById('contactForm');
+    const modal = document.getElementById('successModal');
+    const closeModal = document.getElementById('closeModal');
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      let valid = true;
+
+      // Clear all errors first
+      document.querySelectorAll('[id^="error-"]').forEach(el => {
+        el.classList.add('hidden');
+        el.textContent = '';
+      });
+
+      // Get values
+      const name = form.name.value.trim();
+      const email = form.email.value.trim();
+      const subject = form.subject.value.trim();
+      const message = form.message.value.trim();
+
+      // Validation
+      if (!name) {
+        valid = false;
+        showError('name', 'Full name is required.');
+      }
+
+      if (!email) {
+        valid = false;
+        showError('email', 'Email is required.');
+      } else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+        valid = false;
+        showError('email', 'Please enter a valid email address.');
+      }
+
+      if (!subject) {
+        valid = false;
+        showError('subject', 'Subject is required.');
+      }
+
+      if (!message) {
+        valid = false;
+        showError('message', 'Message is required.');
+      } else if (message.length < 10) {
+        valid = false;
+        showError('message', 'Message must be at least 10 characters.');
+      }
+
+      if (valid) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        form.reset();
+      }
+    });
+
+    function showError(field, message) {
+      const errorEl = document.getElementById(`error-${field}`);
+      errorEl.textContent = message;
+      errorEl.classList.remove('hidden');
+    }
+
+    // Close Modal
+    closeModal.addEventListener('click', () => {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    });
+
+    // Allow Esc key to close modal
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    });
+  </script>
+</body>
+</html>

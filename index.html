@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Wizardly Profile</title>
 
   <!-- Tailwind CSS -->
@@ -12,10 +12,30 @@
   <script src="https://unpkg.com/feather-icons"></script>
 
   <!-- Styles -->
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 
-<body class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+<body class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex flex-col items-center justify-center p-4 space-y-6">
+
+  <!-- 🌐 Navigation Bar -->
+  <nav class="bg-white shadow-md rounded-full px-8 py-3 flex justify-center items-center space-x-8 text-gray-700 font-medium">
+    <a 
+      href="about.html" 
+      class="hover:text-indigo-600 transition duration-300" 
+      data-testid="test-nav-about"
+    >
+      About
+    </a>
+    <a 
+      href="contact.html" 
+      class="hover:text-indigo-600 transition duration-300" 
+      data-testid="test-nav-contact"
+    >
+      Contact
+    </a>
+  </nav>
+
+  <!-- 🪄 Profile Card -->
   <article 
     data-testid="test-profile-card"
     class="profile-card animate-fade-in-up bg-white rounded-xl overflow-hidden w-full max-w-4xl md:flex"
@@ -141,13 +161,9 @@
   </article>
 
   <!-- Scripts -->
-
-
-
-  <!-- External JS file -->
+  <script>
+    feather.replace();
+  </script>
   <script src="script.js" defer></script>
-
-  <!-- Inline animation styles -->
-  
 </body>
 </html>
